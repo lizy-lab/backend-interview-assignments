@@ -23,23 +23,23 @@ tests/
 ### Prerequisites
 
 - Python 3.8+
-- Poetry
+- uv
 
 ### Installation
 
 ```bash
 # Install dependencies
-poetry install
+uv sync
 ```
 
 ### Running Tests
 
 ```bash
 # Run tests
-poetry run pytest
+uv run pytest
 
 # Run tests with coverage
-poetry run pytest --cov=src
+uv run pytest --cov=src
 ```
 
 ## Live Coding Exercise
