@@ -119,6 +119,15 @@ You should see an empty array `[]`. Visit `http://localhost:8000/docs` for inter
 ### Location
 `frontend/src/components/ProductList.jsx`
 
+### Running the Frontend
+
+```bash
+cd frontend
+npm run dev
+```
+
+Visit `http://localhost:5173` in your browser.
+
 ### Tasks
 
 The component skeleton is provided with detailed TODO comments. Implement:
@@ -148,37 +157,6 @@ The component skeleton is provided with detailed TODO comments. Implement:
 - Conditional rendering
 - Async data fetching
 
-### Running the Frontend
-
-```bash
-cd frontend
-npm run dev
-```
-
-Visit `http://localhost:5173` in your browser.
-
-## Part 3: Create Product Form (Bonus/Optional)
-
-**Goal:** Complete the `CreateProductForm` component to add new products.
-
-### Location
-`frontend/src/components/CreateProductForm.jsx`
-
-### Tasks
-
-1. **Implement form submission handler**
-   - Validate all fields are filled
-   - Convert price/stock to numbers
-   - Call `createProduct()` API
-   - Handle success: reset form, show message, notify parent
-   - Handle errors: display error message
-
-### Bonus Challenges
-- Add client-side validation
-- Auto-clear success message after 3 seconds
-- Disable submit button when fields are empty
-
----
 
 ### Testing Your Implementation
 
@@ -254,48 +232,6 @@ Once the backend is running, visit:
 - `GET /api/products/{id}` - Get single product
 - `PATCH /api/products/{id}/stock` - Update stock
 - `PATCH /api/products/{id}/price` - Update price
-
----
-
-## Tips for Success
-
-### Backend
-- Follow DDD principles - keep domain pure
-- Repository pattern abstracts storage
-- Validate business rules in domain models
-- Write tests before implementation (TDD)
-
-### Frontend
-- Read TODO comments carefully - they provide hints
-- Test incrementally (fetch, then filter, then render)
-- Use browser DevTools to debug API calls
-- Check console for errors
-
-### Integration
-- Start backend first, then frontend
-- Check CORS if you get network errors
-- Use browser Network tab to inspect API calls
-- FastAPI docs (`/docs`) help test endpoints
-
----
-
-## Common Issues
-
-**Backend won't start**
-- Did you implement the repository methods?
-- Run `uv sync` to install dependencies
-- Check for syntax errors: `uv run python -m py_compile src/**/*.py`
-
-**Frontend shows empty list**
-- Is the backend running? Check `http://localhost:8000/health`
-- Open browser console - any errors?
-- Did you implement `useEffect` to fetch products?
-- Create a product first using the form
-
-**Search not working**
-- Check if `searchQuery` state is connected to input
-- Verify filter logic uses `.toLowerCase()` for case-insensitive search
-- Log `filteredProducts` to console for debugging
 
 ---
 
