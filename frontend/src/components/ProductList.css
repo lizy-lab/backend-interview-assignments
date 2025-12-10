@@ -1,0 +1,110 @@
+.product-list {
+  background: #1a1a1a;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.search-section {
+  margin-bottom: 1.5rem;
+}
+
+.search-section h2 {
+  margin: 0 0 1rem 0;
+  color: #646cff;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 2px solid #333;
+  border-radius: 8px;
+  background: #242424;
+  color: white;
+  transition: border-color 0.3s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #646cff;
+}
+
+.product-count {
+  color: #888;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.product-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #242424;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.product-table thead {
+  background: #333;
+}
+
+.product-table th {
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  color: #646cff;
+  border-bottom: 2px solid #646cff;
+}
+
+.product-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #333;
+}
+
+.product-table tbody tr:hover {
+  background: #2a2a2a;
+}
+
+.product-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.product-id {
+  font-family: monospace;
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.no-products {
+  text-align: center;
+  color: #888;
+  padding: 2rem !important;
+  font-style: italic;
+}
+
+.loading {
+  text-align: center;
+  padding: 3rem;
+  font-size: 1.2rem;
+  color: #646cff;
+}
+
+.error {
+  background: #f44336;
+  color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.error h3 {
+  margin: 0 0 0.5rem 0;
+}
+
+.error p {
+  margin: 0;
+}

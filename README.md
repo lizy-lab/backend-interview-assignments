@@ -1,21 +1,34 @@
-# Backend Interview Assignment
+# Full-Stack DDD Interview Assignment
 
-A simple Domain-Driven Design (DDD) Python project for a live coding interview.
+A Domain-Driven Design (DDD) Python + React project for live coding interviews. This exercise combines backend architecture with frontend development to assess full-stack capabilities.
 
 ## Project Structure
 
-The project follows a classic DDD structure:
+The project follows a full-stack DDD architecture:
 
 ```
-src/
-├── domain/            # Domain layer
-│   ├── model/         # Domain models
-│   └── repository/    # Repository interfaces
-├── application/       # Application layer
-└── infrastructure/    # Infrastructure layer
-    └── repository/    # Repository implementations
-tests/
-└── unit/              # Unit tests
+backend/
+├── src/
+│   ├── domain/            # Domain layer (business logic)
+│   │   ├── model/         # Domain models (Product)
+│   │   └── repository/    # Repository interfaces
+│   ├── application/       # Application layer (services)
+│   ├── infrastructure/    # Infrastructure layer (implementations)
+│   │   └── repository/    # Repository implementations
+│   └── api/              # API layer (FastAPI)
+│       ├── main.py       # FastAPI app
+│       ├── routes.py     # REST endpoints
+│       └── schemas.py    # Pydantic models
+└── tests/
+    └── unit/             # Unit tests
+
+frontend/
+└── src/
+    ├── components/       # React components (INCOMPLETE)
+    │   ├── ProductList.jsx
+    │   └── CreateProductForm.jsx
+    ├── services/         # API client (COMPLETE)
+    └── App.jsx          # Main app (COMPLETE)
 ```
 
 ## Getting Started
@@ -23,38 +36,301 @@ tests/
 ### Prerequisites
 
 - Python 3.8+
-- uv
+- Node.js 18+ and npm
+- uv (Python package manager)
 
 ### Installation
 
 ```bash
-# Install dependencies
+# Install backend dependencies
 uv sync
+
+# Install frontend dependencies
+cd frontend
+npm install
+cd ..
 ```
 
-### Running Tests
+## Interview Exercise
 
-```bash
-# Run tests
-uv run pytest
+This is a **three-part full-stack exercise** that tests:
+- Backend: DDD architecture, repository pattern, domain validation
+- API: REST endpoint design and integration
+- Frontend: React hooks, state management, API integration
 
-# Run tests with coverage
-uv run pytest --cov=src
-```
+---
 
-## Live Coding Exercise
+## Part 1: Backend Implementation (Required)
 
-This project provides a foundation for a simple product management system. During the interview, you will be asked to:
-
-1. Implement new features
-2. Refactor existing code
-3. Fix bugs
-4. Write additional tests
-5. Explain design decisions and trade-offs
-
-The code follows Domain-Driven Design principles, separating the domain logic from application services and infrastructure concerns.
+**Goal:** Complete the backend domain and infrastructure layers.
 
 ### Tasks
-1. Implement InMemoryProductRepository.
-2. Implement update_price method on Product aggregate, including tests.
-3. Ensure that price cannot be negative, it should raise a ValueError if attempted to set a negative price.
+
+1. **Implement `MemoryProductRepository`** (`src/infrastructure/repository/memory_product_repository.py`)
+   - Implement `save()` - Store product in memory dictionary
+   - Implement `find_by_id()` - Retrieve product by UUID
+   - Implement `find_all()` - Return all products as a list
+   - Use a dictionary with UUID keys for storage
+
+2. **Implement `update_price()` method** (`src/domain/model/product.py`)
+   - Add method to Product class: `update_price(self, new_price: float)`
+   - Validate that price cannot be negative
+   - Raise `ValueError` if price < 0
+   - Update the product's price
+
+3. **Write tests** for price validation
+   - Test valid price updates
+   - Test that negative prices raise `ValueError`
+   - Follow existing test patterns in `tests/unit/`
+
+### Running Backend Tests
+
+```bash
+# Run all tests
+uv run pytest
+
+# Run with coverage
+uv run pytest --cov=src
+
+# Run specific test file
+uv run pytest tests/unit/domain/test_product.py
+```
+
+### Verification
+
+Once implemented, the API should work. Test it:
+
+```bash
+# Start the FastAPI server
+uv run uvicorn src.api.main:app --reload
+
+# In another terminal, test the API
+curl http://localhost:8000/api/products
+```
+
+You should see an empty array `[]`. Visit `http://localhost:8000/docs` for interactive API documentation.
+
+---
+
+## Part 2: Frontend Implementation (Required)
+
+**Goal:** Complete the `ProductList` component to display products with search functionality.
+
+### Location
+`frontend/src/components/ProductList.jsx`
+
+### Tasks
+
+The component skeleton is provided with detailed TODO comments. Implement:
+
+1. **Use `useEffect` to fetch products on mount**
+   - Import and use `useEffect` from React
+   - Call `fetchProducts()` from the API service
+   - Handle loading and error states
+   - Update products state with fetched data
+
+2. **Implement search functionality**
+   - Connect search input to `searchQuery` state
+   - Filter products by name (case-insensitive)
+   - Display filtered results
+
+3. **Render product list**
+   - Use `.map()` to render each product
+   - Display: name, price, stock, ID
+   - Add proper React keys (product.id)
+   - Show "No products found" when empty
+
+### Skills Tested
+- React hooks: `useState`, `useEffect`
+- Component lifecycle understanding
+- Array methods: `.filter()`, `.map()`
+- Controlled inputs
+- Conditional rendering
+- Async data fetching
+
+### Running the Frontend
+
+```bash
+cd frontend
+npm run dev
+```
+
+Visit `http://localhost:5173` in your browser.
+
+### Testing Your Implementation
+
+1. Start the backend: `uv run uvicorn src.api.main:app --reload`
+2. Start the frontend: `cd frontend && npm run dev`
+3. Create products using the "Create Product" tab
+4. Verify they appear in the "Product List" tab
+5. Test the search functionality
+
+---
+
+## Part 3: Create Product Form (Bonus/Optional)
+
+**Goal:** Complete the `CreateProductForm` component to add new products.
+
+### Location
+`frontend/src/components/CreateProductForm.jsx`
+
+### Tasks
+
+1. **Implement form submission handler**
+   - Validate all fields are filled
+   - Convert price/stock to numbers
+   - Call `createProduct()` API
+   - Handle success: reset form, show message, notify parent
+   - Handle errors: display error message
+
+### Bonus Challenges
+- Add client-side validation
+- Auto-clear success message after 3 seconds
+- Disable submit button when fields are empty
+
+---
+
+## Architecture Overview
+
+### Clean Architecture Layers
+
+**Domain Layer** (`src/domain/`)
+- Pure business logic, no dependencies
+- Product aggregate with business rules
+- Repository interface (abstraction)
+
+**Application Layer** (`src/application/`)
+- Use cases and service orchestration
+- ProductService coordinates operations
+- Depends only on domain
+
+**Infrastructure Layer** (`src/infrastructure/`)
+- Technical implementations
+- MemoryProductRepository (to be implemented)
+- Can be swapped (e.g., PostgreSQL)
+
+**API Layer** (`src/api/`)
+- FastAPI REST endpoints
+- Request/response schemas (Pydantic)
+- Maps HTTP to application services
+
+**Frontend** (`frontend/`)
+- React components (functional + hooks)
+- API service client for backend calls
+- Simple, modern UI
+
+### Data Flow
+
+```
+User Action (Browser)
+    ↓
+React Component
+    ↓
+API Service (fetch)
+    ↓
+FastAPI Endpoint
+    ↓
+Application Service
+    ↓
+Domain Model
+    ↓
+Repository Interface
+    ↓
+Infrastructure (Memory/DB)
+```
+
+---
+
+## API Documentation
+
+Once the backend is running, visit:
+- Interactive docs: `http://localhost:8000/docs`
+- Alternative docs: `http://localhost:8000/redoc`
+
+### Available Endpoints
+
+- `POST /api/products` - Create product
+- `GET /api/products` - List all products
+- `GET /api/products/{id}` - Get single product
+- `PATCH /api/products/{id}/stock` - Update stock
+- `PATCH /api/products/{id}/price` - Update price
+
+---
+
+## Tips for Success
+
+### Backend
+- Follow DDD principles - keep domain pure
+- Repository pattern abstracts storage
+- Validate business rules in domain models
+- Write tests before implementation (TDD)
+
+### Frontend
+- Read TODO comments carefully - they provide hints
+- Test incrementally (fetch, then filter, then render)
+- Use browser DevTools to debug API calls
+- Check console for errors
+
+### Integration
+- Start backend first, then frontend
+- Check CORS if you get network errors
+- Use browser Network tab to inspect API calls
+- FastAPI docs (`/docs`) help test endpoints
+
+---
+
+## Common Issues
+
+**Backend won't start**
+- Did you implement the repository methods?
+- Run `uv sync` to install dependencies
+- Check for syntax errors: `uv run python -m py_compile src/**/*.py`
+
+**Frontend shows empty list**
+- Is the backend running? Check `http://localhost:8000/health`
+- Open browser console - any errors?
+- Did you implement `useEffect` to fetch products?
+- Create a product first using the form
+
+**Search not working**
+- Check if `searchQuery` state is connected to input
+- Verify filter logic uses `.toLowerCase()` for case-insensitive search
+- Log `filteredProducts` to console for debugging
+
+---
+
+## Evaluation Criteria
+
+### Backend (40%)
+- Correct implementation of repository pattern
+- Proper domain validation (price rules)
+- Understanding of DDD layers and dependencies
+- Test coverage and quality
+
+### Frontend (40%)
+- Proper use of React hooks (`useState`, `useEffect`)
+- Correct list rendering with keys
+- Search functionality implementation
+- Error handling and loading states
+
+### Integration & Communication (20%)
+- Working end-to-end flow
+- Explanation of design decisions
+- Code quality and best practices
+- Problem-solving approach
+
+---
+
+## Next Steps After Exercise
+
+Potential extensions to discuss or implement:
+- Add update/delete product functionality
+- Implement real database (PostgreSQL)
+- Add authentication/authorization
+- Improve error handling and validation
+- Add pagination for product list
+- Implement stock adjustment history
+- Add product categories/tags
+- Build a Docker setup for deployment
+
+Good luck! Remember: it's not just about completing the tasks, but demonstrating your understanding of architecture, clean code, and problem-solving approach.

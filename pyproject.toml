@@ -6,7 +6,11 @@ authors = [
     { name = "Your Name", email = "your.email@example.com" }
 ]
 requires-python = ">=3.8"
-dependencies = []
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "pydantic>=2.0.0",
+]
 
 [project.optional-dependencies]
 dev = [
