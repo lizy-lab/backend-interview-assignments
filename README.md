@@ -157,16 +157,6 @@ npm run dev
 
 Visit `http://localhost:5173` in your browser.
 
-### Testing Your Implementation
-
-1. Start the backend: `uv run uvicorn src.api.main:app --reload`
-2. Start the frontend: `cd frontend && npm run dev`
-3. Create products using the "Create Product" tab
-4. Verify they appear in the "Product List" tab
-5. Test the search functionality
-
----
-
 ## Part 3: Create Product Form (Bonus/Optional)
 
 **Goal:** Complete the `CreateProductForm` component to add new products.
@@ -187,6 +177,16 @@ Visit `http://localhost:5173` in your browser.
 - Add client-side validation
 - Auto-clear success message after 3 seconds
 - Disable submit button when fields are empty
+
+---
+
+### Testing Your Implementation
+
+1. Start the backend: `uv run uvicorn src.api.main:app --reload`
+2. Start the frontend: `cd frontend && npm run dev`
+3. Create products using the "Create Product" tab
+4. Verify they appear in the "Product List" tab
+5. Test the search functionality
 
 ---
 
@@ -301,36 +301,17 @@ Once the backend is running, visit:
 
 ## Evaluation Criteria
 
-### Backend (40%)
+### Backend
 - Correct implementation of repository pattern
 - Proper domain validation (price rules)
 - Understanding of DDD layers and dependencies
-- Test coverage and quality
 
-### Frontend (40%)
+### Frontend
 - Proper use of React hooks (`useState`, `useEffect`)
 - Correct list rendering with keys
-- Search functionality implementation
-- Error handling and loading states
 
-### Integration & Communication (20%)
+### Integration & Communication
 - Working end-to-end flow
 - Explanation of design decisions
 - Code quality and best practices
 - Problem-solving approach
-
----
-
-## Next Steps After Exercise
-
-Potential extensions to discuss or implement:
-- Add update/delete product functionality
-- Implement real database (PostgreSQL)
-- Add authentication/authorization
-- Improve error handling and validation
-- Add pagination for product list
-- Implement stock adjustment history
-- Add product categories/tags
-- Build a Docker setup for deployment
-
-Good luck! Remember: it's not just about completing the tasks, but demonstrating your understanding of architecture, clean code, and problem-solving approach.

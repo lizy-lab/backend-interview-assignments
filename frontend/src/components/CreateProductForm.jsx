@@ -48,48 +48,42 @@ function CreateProductForm({ onProductCreated }) {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    // TODO: Add your implementation here
-    // Example structure:
-    //
-    // // Reset states
-    // setError(null)
-    // setSuccess(false)
-    //
-    // // Validate inputs
-    // if (!name || !price || !stock) {
-    //   setError('All fields are required')
-    //   return
-    // }
-    //
-    // setLoading(true)
-    //
-    // try {
-    //   // Call API
-    //   const productData = {
-    //     name: name,
-    //     price: parseFloat(price),
-    //     stock: parseInt(stock)
-    //   }
-    //   await createProduct(productData)
-    //
-    //   // Success: reset form and show success message
-    //   setName('')
-    //   setPrice('')
-    //   setStock('')
-    //   setSuccess(true)
-    //
-    //   // Notify parent component
-    //   if (onProductCreated) {
-    //     onProductCreated()
-    //   }
-    // } catch (err) {
-    //   setError(err.message)
-    // } finally {
-    //   setLoading(false)
-    // }
+    // Reset states
+    setError(null)
+    setSuccess(false)
 
-    // REMOVE THIS ALERT AFTER IMPLEMENTING THE FUNCTION
-    alert('TODO: Implement the handleSubmit function')
+    // Validate inputs
+    if (!name || !price || !stock) {
+      setError('All fields are required')
+      return
+    }
+
+    setLoading(true)
+
+    try {
+      // Call API
+      const productData = {
+        name: name,
+        price: parseFloat(price),
+        stock: parseInt(stock)
+      }
+      await createProduct(productData)
+
+      // Success: reset form and show success message
+      setName('')
+      setPrice('')
+      setStock('')
+      setSuccess(true)
+
+      // Notify parent component
+      if (onProductCreated) {
+        onProductCreated()
+      }
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
