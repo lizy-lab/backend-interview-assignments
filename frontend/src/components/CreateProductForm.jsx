@@ -6,18 +6,6 @@ import './CreateProductForm.css'
  * CreateProductForm Component
  *
  * This component provides a form to create new products.
- *
- * TODO: Complete the following tasks:
- * 1. Implement form submission handler
- * 2. Call the API to create a product
- * 3. Handle success and error states
- * 4. Reset form after successful submission
- *
- * Learning objectives:
- * - Working with controlled form inputs
- * - Handling form submission in React
- * - Making API calls with error handling
- * - Managing form state and validation
  */
 function CreateProductForm({ onProductCreated }) {
   // Form field states
@@ -30,21 +18,6 @@ function CreateProductForm({ onProductCreated }) {
   const [error, setError] = useState(null)
   const [success, setSuccess] = useState(false)
 
-  // TODO 1: Implement form submission handler
-  // This function should:
-  // 1. Prevent default form submission
-  // 2. Validate that all fields are filled
-  // 3. Set loading state to true
-  // 4. Call createProduct() from the api service
-  // 5. Handle success: reset form, show success message, call onProductCreated callback
-  // 6. Handle errors: display error message
-  // 7. Set loading state to false when done
-  //
-  // Hints:
-  // - Use e.preventDefault() to prevent page reload
-  // - Convert price and stock to numbers: parseFloat(price), parseInt(stock)
-  // - Use try/catch or .then/.catch for async error handling
-  // - Call onProductCreated() prop after successful creation
   const handleSubmit = async (e) => {
     e.preventDefault()
 

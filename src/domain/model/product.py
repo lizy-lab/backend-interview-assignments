@@ -16,6 +16,4 @@ class Product:
     
     def update_stock(self, quantity: int) -> None:
         """Update product stock quantity."""
-        if self.stock + quantity < 0:
-            raise ValueError("Cannot reduce stock below zero")
-        self.stock += quantity
+        raise NotImplementedError("Stock update logic not implemented yet.")

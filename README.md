@@ -60,40 +60,25 @@ This is a **three-part full-stack exercise** that tests:
 
 ---
 
-## Part 1: Backend Implementation (Required)
+## Part 1: Backend Implementation
 
 **Goal:** Complete the backend domain and infrastructure layers.
 
 ### Tasks
 
 1. **Implement `MemoryProductRepository`** (`src/infrastructure/repository/memory_product_repository.py`)
-   - Implement `save()` - Store product in memory dictionary
-   - Implement `find_by_id()` - Retrieve product by UUID
-   - Implement `find_all()` - Return all products as a list
-   - Use a dictionary with UUID keys for storage
 
-2. **Implement `update_price()` method** (`src/domain/model/product.py`)
-   - Add method to Product class: `update_price(self, new_price: float)`
-   - Validate that price cannot be negative
-   - Raise `ValueError` if price < 0
-   - Update the product's price
+2. **Implement `update_stock()` method** (`src/domain/model/product.py`)
 
-3. **Write tests** for price validation
-   - Test valid price updates
-   - Test that negative prices raise `ValueError`
-   - Follow existing test patterns in `tests/unit/`
+3. **Write tests** for update_stock validation (`tests/unit/domain/test_product.py`)
+   - Test update to decrease stock
+   - Test that final negative stock raise `ValueError`
 
 ### Running Backend Tests
 
 ```bash
 # Run all tests
 uv run pytest
-
-# Run with coverage
-uv run pytest --cov=src
-
-# Run specific test file
-uv run pytest tests/unit/domain/test_product.py
 ```
 
 ### Verification
@@ -112,7 +97,7 @@ You should see an empty array `[]`. Visit `http://localhost:8000/docs` for inter
 
 ---
 
-## Part 2: Frontend Implementation (Required)
+## Part 2: Frontend Implementation
 
 **Goal:** Complete the `ProductList` component to display products with search functionality.
 
