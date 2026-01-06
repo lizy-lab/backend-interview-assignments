@@ -7,8 +7,6 @@ from src.api.schemas import (
     ProductCreate,
     ProductResponse,
     UpdateStock,
-    UpdatePrice,
-    ErrorResponse
 )
 from src.domain.model.product import Product
 

@@ -27,11 +27,6 @@ class UpdateStock(BaseModel):
     quantity: int = Field(..., description="Quantity to add (positive) or remove (negative)")
 
 
-class UpdatePrice(BaseModel):
-    """Schema for updating product price."""
-    price: float = Field(..., ge=0, description="New price (must be non-negative)")
-
-
 class ErrorResponse(BaseModel):
     """Schema for error responses."""
     detail: str

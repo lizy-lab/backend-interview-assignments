@@ -53,9 +53,8 @@ cd ..
 
 ## Interview Exercise
 
-This is a **three-part full-stack exercise** that tests:
+This is a **two-part full-stack exercise** that tests:
 - Backend: DDD architecture, repository pattern, domain validation
-- API: REST endpoint design and integration
 - Frontend: React hooks, state management, API integration
 
 ---
@@ -113,44 +112,6 @@ npm run dev
 
 Visit `http://localhost:5173` in your browser.
 
-### Tasks
-
-The component skeleton is provided with detailed TODO comments. Implement:
-
-1. **Use `useEffect` to fetch products on mount**
-   - Import and use `useEffect` from React
-   - Call `fetchProducts()` from the API service
-   - Handle loading and error states
-   - Update products state with fetched data
-
-2. **Implement search functionality**
-   - Connect search input to `searchQuery` state
-   - Filter products by name (case-insensitive)
-   - Display filtered results
-
-3. **Render product list**
-   - Use `.map()` to render each product
-   - Display: name, price, stock, ID
-   - Add proper React keys (product.id)
-   - Show "No products found" when empty
-
-### Skills Tested
-- React hooks: `useState`, `useEffect`
-- Component lifecycle understanding
-- Array methods: `.filter()`, `.map()`
-- Controlled inputs
-- Conditional rendering
-- Async data fetching
-
-
-### Testing Your Implementation
-
-1. Start the backend: `uv run uvicorn src.api.main:app --reload`
-2. Start the frontend: `cd frontend && npm run dev`
-3. Create products using the "Create Product" tab
-4. Verify they appear in the "Product List" tab
-5. Test the search functionality
-
 ---
 
 ## Architecture Overview
@@ -201,38 +162,3 @@ Repository Interface
     ↓
 Infrastructure (Memory/DB)
 ```
-
----
-
-## API Documentation
-
-Once the backend is running, visit:
-- Interactive docs: `http://localhost:8000/docs`
-- Alternative docs: `http://localhost:8000/redoc`
-
-### Available Endpoints
-
-- `POST /api/products` - Create product
-- `GET /api/products` - List all products
-- `GET /api/products/{id}` - Get single product
-- `PATCH /api/products/{id}/stock` - Update stock
-- `PATCH /api/products/{id}/price` - Update price
-
----
-
-## Evaluation Criteria
-
-### Backend
-- Correct implementation of repository pattern
-- Proper domain validation (price rules)
-- Understanding of DDD layers and dependencies
-
-### Frontend
-- Proper use of React hooks (`useState`, `useEffect`)
-- Correct list rendering with keys
-
-### Integration & Communication
-- Working end-to-end flow
-- Explanation of design decisions
-- Code quality and best practices
-- Problem-solving approach
