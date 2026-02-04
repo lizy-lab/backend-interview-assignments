@@ -1,6 +1,5 @@
 """API routes for product management."""
 from fastapi import APIRouter, HTTPException, Request
-from typing import List
 from uuid import UUID
 
 from src.api.schemas import (
@@ -51,7 +50,7 @@ def create_product(product_data: ProductCreate, request: Request):
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
 
-@router.get("/products", response_model=List[ProductResponse])
+@router.get("/products", response_model=list[ProductResponse])
 def get_all_products(request: Request):
     """
     Get all products.

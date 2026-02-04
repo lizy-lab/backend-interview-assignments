@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from typing import List, Optional
 from uuid import UUID
 
 from src.domain.model.product import Product
@@ -12,11 +11,11 @@ class ProductRepository(ABC):
         pass
 
     @abstractmethod
-    def find_by_id(self, product_id: UUID) -> Optional[Product]:
+    def find_by_id(self, product_id: UUID) -> Product | None:
         """Find a product by its ID."""
         pass
 
     @abstractmethod
-    def find_all(self) -> List[Product]:
+    def find_all(self) -> list[Product]:
         """Find all products."""
         pass
