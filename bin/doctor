@@ -1,0 +1,201 @@
+#!/usr/bin/env bash
+#
+# bin/doctor — verify that all required tools are installed
+# Usage:
+#   bin/doctor              Check all tools
+#   bin/doctor python       Check tools for the Python path
+#   bin/doctor typescript   Check tools for the TypeScript path
+#
+set -euo pipefail
+
+LANG_FILTER="${1:-all}"
+
+# ---------------------------------------------------------------------------
+# Colors (disabled when output is not a terminal)
+# ---------------------------------------------------------------------------
+if [ -t 1 ]; then
+    GREEN='\033[0;32m'
+    RED='\033[0;31m'
+    BOLD='\033[1m'
+    NC='\033[0m'
+else
+    GREEN='' RED='' BOLD='' NC=''
+fi
+
+# ---------------------------------------------------------------------------
+# Detect OS for install hints
+# ---------------------------------------------------------------------------
+OS="unknown"
+case "$(uname -s)" in
+    Darwin*) OS="macOS" ;;
+    Linux*)  OS="Linux" ;;
+esac
+
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
+errors=0
+
+pass() { printf "${GREEN}OK${NC}    %-10s %s\n" "$1" "$2"; }
+fail() { printf "${RED}FAIL${NC}  %-10s %s\n" "$1" "$2"; errors=$((errors + 1)); }
+hint() { printf "         ↳ Install: %s\n" "$1"; }
+
+version_gte() {
+    local IFS=.
+    local i a=($1) b=($2)
+    for ((i = 0; i < ${#b[@]}; i++)); do
+        local av="${a[i]:-0}" bv="${b[i]:-0}"
+        if ((av > bv)); then return 0; fi
+        if ((av < bv)); then return 1; fi
+    done
+    return 0
+}
+
+# ---------------------------------------------------------------------------
+# Individual checks
+# ---------------------------------------------------------------------------
+check_git() {
+    if command -v git &>/dev/null; then
+        ver=$(git --version | awk '{print $3}')
+        pass "git" "(${ver})"
+    else
+        fail "git" "not found"
+        case $OS in
+            macOS) hint "xcode-select --install" ;;
+            Linux) hint "sudo apt install git" ;;
+            *)     hint "https://git-scm.com/downloads" ;;
+        esac
+    fi
+}
+
+check_python() {
+    local min="3.8"
+    if command -v python3 &>/dev/null; then
+        ver=$(python3 --version 2>&1 | awk '{print $2}')
+        if version_gte "$ver" "$min"; then
+            pass "python3" "(${ver})"
+        else
+            fail "python3" "(${ver} — need >= ${min})"
+            case $OS in
+                macOS) hint "brew install python" ;;
+                Linux) hint "sudo apt install python3" ;;
+                *)     hint "https://www.python.org/downloads/" ;;
+            esac
+        fi
+    else
+        fail "python3" "not found (need >= ${min})"
+        case $OS in
+            macOS) hint "brew install python" ;;
+            Linux) hint "sudo apt install python3" ;;
+            *)     hint "https://www.python.org/downloads/" ;;
+        esac
+    fi
+}
+
+check_uv() {
+    if command -v uv &>/dev/null; then
+        ver=$(uv --version 2>&1 | awk '{print $2}')
+        pass "uv" "(${ver})"
+    else
+        fail "uv" "not found"
+        hint "curl -LsSf https://astral.sh/uv/install.sh | sh"
+    fi
+}
+
+check_bun() {
+    if command -v bun &>/dev/null; then
+        ver=$(bun --version 2>&1)
+        pass "bun" "(${ver})"
+    else
+        fail "bun" "not found"
+        hint "curl -fsSL https://bun.sh/install | bash"
+    fi
+}
+
+check_node() {
+    local min="18"
+    if command -v node &>/dev/null; then
+        ver=$(node --version 2>&1 | sed 's/^v//')
+        major=$(echo "$ver" | cut -d. -f1)
+        if [ "$major" -ge "$min" ] 2>/dev/null; then
+            pass "node" "(v${ver})"
+        else
+            fail "node" "(v${ver} — need >= v${min})"
+            case $OS in
+                macOS) hint "brew install node" ;;
+                Linux) hint "sudo apt install nodejs  OR  https://nodejs.org" ;;
+                *)     hint "https://nodejs.org" ;;
+            esac
+        fi
+    else
+        fail "node" "not found (need >= v${min})"
+        case $OS in
+            macOS) hint "brew install node" ;;
+            Linux) hint "sudo apt install nodejs  OR  https://nodejs.org" ;;
+            *)     hint "https://nodejs.org" ;;
+        esac
+    fi
+}
+
+check_npm() {
+    if command -v npm &>/dev/null; then
+        ver=$(npm --version 2>&1)
+        pass "npm" "(${ver})"
+    else
+        fail "npm" "not found (comes with Node.js)"
+        hint "install Node.js — npm is bundled with it"
+    fi
+}
+
+# ---------------------------------------------------------------------------
+# Run checks based on language filter
+# ---------------------------------------------------------------------------
+case "$LANG_FILTER" in
+    python)
+        printf "\n${BOLD}Checking tools for Python path…${NC}\n\n"
+        check_git
+        check_python
+        check_uv
+        check_node
+        check_npm
+        ;;
+    typescript)
+        printf "\n${BOLD}Checking tools for TypeScript path…${NC}\n\n"
+        check_git
+        check_bun
+        check_node
+        check_npm
+        ;;
+    all)
+        printf "\n${BOLD}Checking all required tools…${NC}\n\n"
+        check_git
+        check_python
+        check_uv
+        check_bun
+        check_node
+        check_npm
+        ;;
+    *)
+        echo "Usage: bin/doctor [python|typescript]"
+        echo "  (no argument checks all tools)"
+        exit 1
+        ;;
+esac
+
+# ---------------------------------------------------------------------------
+# Summary
+# ---------------------------------------------------------------------------
+echo ""
+if [ "$errors" -eq 0 ]; then
+    printf "${GREEN}${BOLD}All tools found — you're ready to go!${NC}\n"
+    case "$LANG_FILTER" in
+        python)     echo "Run 'make setup-python' to install project dependencies." ;;
+        typescript) echo "Run 'make setup-typescript' to install project dependencies." ;;
+        all)        echo "Run 'make setup' to install project dependencies." ;;
+    esac
+else
+    printf "${RED}${BOLD}${errors} tool(s) missing — install them and re-run the check${NC}\n"
+fi
+echo ""
+
+exit $((errors > 0 ? 1 : 0))
