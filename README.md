@@ -2,6 +2,30 @@
 
 A Domain-Driven Design (DDD) full-stack project for live coding interviews. Candidates choose either **Python** or **TypeScript** for the backend — both serve the same API contract and work with the shared React frontend.
 
+## Getting Started
+
+**1. Check your tools** — verify everything is installed:
+
+```bash
+# If you chose Python:
+make doctor-python
+
+# If you chose TypeScript:
+make doctor-typescript
+```
+
+**2. Install dependencies:**
+
+```bash
+# If you chose Python:
+make setup-python
+
+# If you chose TypeScript:
+make setup-typescript
+```
+
+Run `make` to see all available targets.
+
 ## Choose Your Backend
 
 | | Python | TypeScript |
