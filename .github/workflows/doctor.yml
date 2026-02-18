@@ -1,0 +1,70 @@
+name: Doctor CI
+
+on:
+  workflow_dispatch:
+
+jobs:
+  doctor-missing-tools:
+    name: Verify doctor detects missing tools
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run doctor (should fail — tools not installed)
+        run: |
+          ./bin/doctor && exit 1 || echo "Doctor correctly detected missing tools (exit code $?)"
+
+  doctor-python:
+    name: Python path (doctor + setup)
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Run doctor-python
+        run: make doctor-python
+
+      - name: Run setup-python
+        run: make setup-python
+
+      - name: Run Python tests
+        working-directory: backend/python
+        run: uv run pytest
+
+  doctor-typescript:
+    name: TypeScript path (doctor + setup)
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Run doctor-typescript
+        run: make doctor-typescript
+
+      - name: Run setup-typescript
+        run: make setup-typescript
+
+      - name: Run TypeScript tests
+        working-directory: backend/typescript
+        run: bun test
