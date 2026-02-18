@@ -30,5 +30,7 @@ describe("Product", () => {
     expect(product.stock).toBe(initialStock + 3);
   });
 
+  test.todo("update stock decrease");
+
   test.todo("update stock negative throws error");
 });

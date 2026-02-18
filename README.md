@@ -7,7 +7,7 @@ A Domain-Driven Design (DDD) full-stack project for live coding interviews. Cand
 | | Python | TypeScript |
 |---|---|---|
 | **Directory** | [`backend/python/`](backend/python/) | [`backend/typescript/`](backend/typescript/) |
-| Runtime | Python 3.8+ / uv | Bun |
+| Runtime | Python 3.13+ / uv | Bun |
 | Framework | FastAPI | Fastify |
 | Validation | Pydantic | Zod |
 | Testing | pytest | bun test |
@@ -58,6 +58,42 @@ Complete the `ProductList` component (`frontend/src/components/ProductList.jsx`)
 2. Implement search filtering by name
 3. Render the product list
 4. Handle loading and error states
+
+## Part 3: DevOps
+
+**Goal:** Complete the Dockerfile to containerize the backend API.
+
+### Task
+
+Open `Dockerfile` in the project root and complete the 5 TODOs:
+
+1. Copy dependency files
+2. Install dependencies
+3. Copy source code
+4. Expose the correct port
+5. Set the startup command
+
+### Hints
+
+- The app uses `uv` for dependency management
+- Dependencies are defined in `pyproject.toml` and locked in `uv.lock`
+- The FastAPI app entry point is `src.api.main:app`
+- The server runs on port 8000
+
+### Verification (if Docker is available)
+
+```bash
+# Build the image
+docker build -t product-api .
+
+# Run the container
+docker run -p 8000:8000 product-api
+
+# Test the API
+curl http://localhost:8000/api/products
+```
+
+---
 
 ## Architecture Overview
 

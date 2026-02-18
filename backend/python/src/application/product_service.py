@@ -1,4 +1,3 @@
-from typing import List, Optional
 from uuid import UUID
 
 from src.domain.model.product import Product
@@ -15,15 +14,15 @@ class ProductService:
         self.product_repository.save(product)
         return product
 
-    def get_product(self, product_id: UUID) -> Optional[Product]:
+    def get_product(self, product_id: UUID) -> Product | None:
         """Get a product by its ID."""
         return self.product_repository.find_by_id(product_id)
 
-    def get_all_products(self) -> List[Product]:
+    def get_all_products(self) -> list[Product]:
         """Get all products."""
         return self.product_repository.find_all()
 
-    def update_product_stock(self, product_id: UUID, quantity: int) -> Optional[Product]:
+    def update_product_stock(self, product_id: UUID, quantity: int) -> Product | None:
         """Update a product's stock."""
         product = self.product_repository.find_by_id(product_id)
         if product:

@@ -27,11 +27,13 @@ The class extends `ProductRepository` but has no implementation. Implement the `
 
 The method currently throws `Error("Stock update logic not implemented yet.")`. Implement stock update logic with validation that stock cannot go negative.
 
-### 3. Write a test for negative stock validation
+### 3. Write tests for `updateStock` validation
 
 **File:** `tests/unit/domain/product.test.ts`
 
-Two tests are provided. Add a third test that verifies `updateStock` throws an error when the resulting stock would be negative.
+Two tests are provided. Write additional tests:
+- Test decreasing stock with a negative quantity
+- Test that reducing stock below zero throws an error
 
 ## Running Tests
 

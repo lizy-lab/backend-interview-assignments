@@ -1,6 +1,5 @@
 """API routes for product management."""
 from fastapi import APIRouter, Depends, HTTPException, Request
-from typing import List
 from uuid import UUID
 
 from src.api.schemas import (
@@ -15,10 +14,12 @@ router = APIRouter(tags=["products"])
 
 
 def get_product_service(request: Request) -> ProductService:
+    """Helper to get product service from app state."""
     return request.app.state.product_service
 
 
 def product_to_response(product: Product) -> ProductResponse:
+    """Convert domain Product to API response."""
     return ProductResponse(
         id=str(product.id),
         name=product.name,
@@ -52,9 +53,13 @@ def create_product(
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
 
-@router.get("/products", response_model=List[ProductResponse])
+@router.get("/products", response_model=list[ProductResponse])
 def get_all_products(service: ProductService = Depends(get_product_service)):
-    """Get all products."""
+    """
+    Get all products.
+
+    Returns a list of all products in the system.
+    """
     try:
         products = service.get_all_products()
         return [product_to_response(p) for p in products]

@@ -21,12 +21,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Dependency injection
+# Initialize repository and service (Dependency Injection)
 repository = MemoryProductRepository()
 product_service = ProductService(repository)
+
+# Make service available to routes
 app.state.product_service = product_service
 
-# Routes
+# Include API routes
 app.include_router(router, prefix="/api")
 
 

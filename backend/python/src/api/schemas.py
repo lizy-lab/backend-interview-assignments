@@ -1,7 +1,5 @@
 """Pydantic schemas for API request/response models."""
 from pydantic import BaseModel, Field
-from uuid import UUID
-from typing import List
 
 
 class ProductCreate(BaseModel):

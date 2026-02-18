@@ -4,7 +4,7 @@ FastAPI + Pydantic backend following DDD architecture.
 
 ## Prerequisites
 
-- Python 3.8+
+- Python 3.13+
 - [uv](https://docs.astral.sh/uv/) package manager
 
 ## Setup
@@ -28,11 +28,13 @@ The class extends `ProductRepository` but has no implementation. Implement the `
 
 The method currently raises `NotImplementedError`. Implement stock update logic with validation that stock cannot go negative.
 
-### 3. Write a test for negative stock validation
+### 3. Write tests for `update_stock` validation
 
 **File:** `tests/unit/domain/test_product.py`
 
-Two tests are provided. Add a third test that verifies `update_stock` raises a `ValueError` when the resulting stock would be negative.
+Two tests are provided. Write additional tests:
+- Test decreasing stock with a negative quantity
+- Test that reducing stock below zero raises `ValueError`
 
 ## Running Tests
 

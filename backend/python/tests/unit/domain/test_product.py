@@ -32,5 +32,9 @@ def test_update_stock_positive():
     assert product.stock == initial_stock + 3
 
 
+def test_update_stock_decrease():
+    pytest.fail("TODO: implement this test")
+
+
 def test_update_stock_negative_raises_error():
     pytest.fail("TODO: implement this test")
