@@ -30,3 +30,7 @@ def test_update_stock_positive():
 
     # Then
     assert product.stock == initial_stock + 3
+
+
+def test_update_stock_negative_raises_error():
+    pytest.fail("TODO: implement this test")

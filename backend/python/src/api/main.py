@@ -21,15 +21,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Initialize repository and service (Dependency Injection)
-# Note: In production, you'd use FastAPI's dependency injection system
+# Dependency injection
 repository = MemoryProductRepository()
 product_service = ProductService(repository)
-
-# Make service available to routes
 app.state.product_service = product_service
 
-# Include API routes
+# Routes
 app.include_router(router, prefix="/api")
 
 

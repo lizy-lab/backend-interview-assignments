@@ -1,5 +1,5 @@
 """API routes for product management."""
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Request
 from typing import List
 from uuid import UUID
 
@@ -8,18 +8,17 @@ from src.api.schemas import (
     ProductResponse,
     UpdateStock,
 )
+from src.application.product_service import ProductService
 from src.domain.model.product import Product
 
 router = APIRouter(tags=["products"])
 
 
-def get_product_service(request: Request):
-    """Helper to get product service from app state."""
+def get_product_service(request: Request) -> ProductService:
     return request.app.state.product_service
 
 
 def product_to_response(product: Product) -> ProductResponse:
-    """Convert domain Product to API response."""
     return ProductResponse(
         id=str(product.id),
         name=product.name,
@@ -29,7 +28,10 @@ def product_to_response(product: Product) -> ProductResponse:
 
 
 @router.post("/products", response_model=ProductResponse, status_code=201)
-def create_product(product_data: ProductCreate, request: Request):
+def create_product(
+    product_data: ProductCreate,
+    service: ProductService = Depends(get_product_service),
+):
     """
     Create a new product.
 
@@ -38,7 +40,6 @@ def create_product(product_data: ProductCreate, request: Request):
     - **stock**: Initial stock quantity, must be >= 0 (required)
     """
     try:
-        service = get_product_service(request)
         product = service.create_product(
             name=product_data.name,
             price=product_data.price,
@@ -52,14 +53,9 @@ def create_product(product_data: ProductCreate, request: Request):
 
 
 @router.get("/products", response_model=List[ProductResponse])
-def get_all_products(request: Request):
-    """
-    Get all products.
-
-    Returns a list of all products in the system.
-    """
+def get_all_products(service: ProductService = Depends(get_product_service)):
+    """Get all products."""
     try:
-        service = get_product_service(request)
         products = service.get_all_products()
         return [product_to_response(p) for p in products]
     except Exception as e:
@@ -67,20 +63,21 @@ def get_all_products(request: Request):
 
 
 @router.get("/products/{product_id}", response_model=ProductResponse)
-def get_product(product_id: str, request: Request):
+def get_product(
+    product_id: str,
+    service: ProductService = Depends(get_product_service),
+):
     """
     Get a product by ID.
 
     - **product_id**: UUID of the product
     """
     try:
-        # Validate UUID format
         uuid_obj = UUID(product_id)
     except ValueError:
         raise HTTPException(status_code=400, detail="Invalid product ID format")
 
     try:
-        service = get_product_service(request)
         product = service.get_product(uuid_obj)
 
         if product is None:
@@ -94,7 +91,11 @@ def get_product(product_id: str, request: Request):
 
 
 @router.patch("/products/{product_id}/stock", response_model=ProductResponse)
-def update_product_stock(product_id: str, stock_update: UpdateStock, request: Request):
+def update_product_stock(
+    product_id: str,
+    stock_update: UpdateStock,
+    service: ProductService = Depends(get_product_service),
+):
     """
     Update product stock.
 
@@ -107,7 +108,6 @@ def update_product_stock(product_id: str, stock_update: UpdateStock, request: Re
         raise HTTPException(status_code=400, detail="Invalid product ID format")
 
     try:
-        service = get_product_service(request)
         product = service.update_product_stock(uuid_obj, stock_update.quantity)
 
         if product is None:
