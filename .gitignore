@@ -24,3 +24,7 @@ htmlcov/
 .env
 venv/
 .venv/
+
+# TypeScript / Bun
+node_modules/
+*.tsbuildinfo

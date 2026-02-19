@@ -22,7 +22,6 @@ app.add_middleware(
 )
 
 # Initialize repository and service (Dependency Injection)
-# Note: In production, you'd use FastAPI's dependency injection system
 repository = MemoryProductRepository()
 product_service = ProductService(repository)
 
