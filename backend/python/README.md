@@ -36,6 +36,26 @@ Two tests are provided. Write additional tests:
 - Test decreasing stock with a negative quantity
 - Test that reducing stock below zero raises `ValueError`
 
+### 4. Complete the Dockerfile
+
+**File:** `Dockerfile`
+
+Complete the 5 TODOs to containerize the FastAPI application.
+
+**Hints:**
+- The app uses `uv` for dependency management
+- Dependencies are defined in `pyproject.toml` and locked in `uv.lock`
+- The FastAPI app entry point is `src.api.main:app`
+- The server runs on port 8000
+
+**Verification (if Docker is available):**
+
+```bash
+docker build -t product-api .
+docker run -p 8000:8000 product-api
+curl http://localhost:8000/api/products
+```
+
 ## Running Tests
 
 ```bash

@@ -35,6 +35,25 @@ Two tests are provided. Write additional tests:
 - Test decreasing stock with a negative quantity
 - Test that reducing stock below zero throws an error
 
+### 4. Complete the Dockerfile
+
+**File:** `Dockerfile`
+
+Complete the 5 TODOs to containerize the Fastify application.
+
+**Hints:**
+- The app uses Bun as the runtime
+- Dependencies are defined in `package.json` and locked in `bun.lock`
+- The app entry point is `src/api/app.ts`
+- The server runs on port 8000
+
+**Verification (if Docker is available):**
+
+```bash
+docker build -t product-api .
+docker run -p 8000:8000 product-api
+```
+
 ## Running Tests
 
 ```bash
