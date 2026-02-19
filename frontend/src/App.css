@@ -8,17 +8,17 @@
   text-align: center;
   margin-bottom: 2rem;
   padding-bottom: 1rem;
-  border-bottom: 2px solid #646cff;
+  border-bottom: 2px solid var(--color-accent);
 }
 
 .app-header h1 {
   margin: 0;
   font-size: 2.5rem;
-  color: #646cff;
+  color: var(--color-accent);
 }
 
 .subtitle {
-  color: #888;
+  color: var(--color-text-muted);
   margin: 0.5rem 0 0 0;
   font-size: 1rem;
 }
@@ -33,21 +33,21 @@
 .app-nav button {
   padding: 0.75rem 1.5rem;
   font-size: 1rem;
-  border: 2px solid #646cff;
+  border: 2px solid var(--color-accent);
   background: transparent;
-  color: #646cff;
+  color: var(--color-accent);
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .app-nav button:hover {
-  background: #646cff;
+  background: var(--color-accent);
   color: white;
 }
 
 .app-nav button.active {
-  background: #646cff;
+  background: var(--color-accent);
   color: white;
 }
 
@@ -59,8 +59,8 @@
   text-align: center;
   margin-top: 3rem;
   padding-top: 1rem;
-  border-top: 1px solid #333;
-  color: #888;
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text-muted);
   font-size: 0.9rem;
 }
 
@@ -68,7 +68,7 @@
   text-align: center;
   padding: 2rem;
   font-size: 1.2rem;
-  color: #646cff;
+  color: var(--color-accent);
 }
 
 .error {
