@@ -1,5 +1,5 @@
 # Dockerfile for the Product API
-# Complete the TODOs below to containerize this Fastify application
+# Complete the TODOs below to containerize this Hono application
 
 FROM oven/bun:latest
 
@@ -17,6 +17,6 @@ WORKDIR /app
 # TODO 4: Expose the port the application runs on
 
 
-# TODO 5: Set the command to start the Fastify server
+# TODO 5: Set the command to start the Hono server
 # (hint: the app entry point is src/api/app.ts)
 

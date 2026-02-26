@@ -1,11 +1,15 @@
-import type { FastifyPluginAsync } from "fastify";
+import { zValidator } from "@hono/zod-validator";
+import { Hono } from "hono";
+import type { Context } from "hono";
+import type { z } from "zod";
 import type { ProductService } from "../application/product-service";
 import type { Product } from "../domain/model/product";
-import { productCreateSchema, updateStockSchema } from "./schemas";
-import type { ProductResponse } from "./schemas";
-
-const UUID_REGEX =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+import {
+  type ProductResponse,
+  productCreateSchema,
+  productIdParamSchema,
+  updateStockSchema,
+} from "./schemas";
 
 function toProductResponse(product: Product): ProductResponse {
   return {
@@ -16,91 +20,60 @@ function toProductResponse(product: Product): ProductResponse {
   };
 }
 
-export function productRoutes(service: ProductService): FastifyPluginAsync {
-  return async (fastify) => {
-    fastify.post("/", async (request, reply) => {
-      try {
-        const parsed = productCreateSchema.safeParse(request.body);
-        if (!parsed.success) {
-          return reply.status(400).send({ detail: parsed.error.issues[0].message });
-        }
+const validationHook = (
+  result: z.SafeParseReturnType<unknown, unknown>,
+  c: Context,
+) => {
+  if (!result.success) {
+    return c.json({ detail: result.error.issues[0].message }, 400);
+  }
+};
 
-        const { name, price, stock } = parsed.data;
-        const product = service.createProduct(name, price, stock);
-        return reply.status(201).send(toProductResponse(product));
-      } catch (error) {
-        return reply
-          .status(500)
-          .send({ detail: `Internal server error: ${error}` });
+export function productRoutes(service: ProductService): Hono {
+  const router = new Hono();
+
+  router.post(
+    "/",
+    zValidator("json", productCreateSchema, validationHook),
+    (c) => {
+      const { name, price, stock } = c.req.valid("json");
+      const product = service.createProduct(name, price, stock);
+      return c.json(toProductResponse(product), 201);
+    },
+  );
+
+  router.get("/", (c) => {
+    const products = service.getAllProducts();
+    return c.json(products.map(toProductResponse));
+  });
+
+  router.get(
+    "/:productId",
+    zValidator("param", productIdParamSchema, validationHook),
+    (c) => {
+      const { productId } = c.req.valid("param");
+      const product = service.getProduct(productId);
+      if (!product) {
+        return c.json({ detail: "Product not found" }, 404);
       }
-    });
+      return c.json(toProductResponse(product));
+    },
+  );
 
-    fastify.get("/", async (_request, reply) => {
-      try {
-        const products = service.getAllProducts();
-        return reply.send(products.map(toProductResponse));
-      } catch (error) {
-        return reply
-          .status(500)
-          .send({ detail: `Internal server error: ${error}` });
+  router.patch(
+    "/:productId/stock",
+    zValidator("param", productIdParamSchema, validationHook),
+    zValidator("json", updateStockSchema, validationHook),
+    (c) => {
+      const { productId } = c.req.valid("param");
+      const { quantity } = c.req.valid("json");
+      const product = service.updateProductStock(productId, quantity);
+      if (!product) {
+        return c.json({ detail: "Product not found" }, 404);
       }
-    });
+      return c.json(toProductResponse(product));
+    },
+  );
 
-    fastify.get<{ Params: { productId: string } }>(
-      "/:productId",
-      async (request, reply) => {
-        const { productId } = request.params;
-
-        if (!UUID_REGEX.test(productId)) {
-          return reply.status(400).send({ detail: "Invalid product ID format" });
-        }
-
-        try {
-          const product = service.getProduct(productId);
-          if (!product) {
-            return reply.status(404).send({ detail: "Product not found" });
-          }
-          return reply.send(toProductResponse(product));
-        } catch (error) {
-          return reply
-            .status(500)
-            .send({ detail: `Internal server error: ${error}` });
-        }
-      },
-    );
-
-    fastify.patch<{ Params: { productId: string } }>(
-      "/:productId/stock",
-      async (request, reply) => {
-        const { productId } = request.params;
-
-        if (!UUID_REGEX.test(productId)) {
-          return reply.status(400).send({ detail: "Invalid product ID format" });
-        }
-
-        const parsed = updateStockSchema.safeParse(request.body);
-        if (!parsed.success) {
-          return reply.status(400).send({ detail: parsed.error.issues[0].message });
-        }
-
-        try {
-          const product = service.updateProductStock(
-            productId,
-            parsed.data.quantity,
-          );
-          if (!product) {
-            return reply.status(404).send({ detail: "Product not found" });
-          }
-          return reply.send(toProductResponse(product));
-        } catch (error) {
-          if (error instanceof Error) {
-            return reply.status(400).send({ detail: error.message });
-          }
-          return reply
-            .status(500)
-            .send({ detail: `Internal server error: ${error}` });
-        }
-      },
-    );
-  };
+  return router;
 }

@@ -1,35 +1,49 @@
-import cors from "@fastify/cors";
-import Fastify from "fastify";
+import { Hono } from "hono";
+import { cors } from "hono/cors";
+import { HTTPException } from "hono/http-exception";
 import { ProductService } from "../application/product-service";
 import { MemoryProductRepository } from "../infrastructure/repository/memory-product-repository";
 import { productRoutes } from "./routes";
 
-const app = Fastify();
+const app = new Hono();
 
-await app.register(cors, {
-  origin: ["http://localhost:5173", "http://localhost:3000"],
-});
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "http://localhost:3000"],
+  }),
+);
 
 // Dependency injection
 const repository = new MemoryProductRepository();
 const productService = new ProductService(repository);
 
 // Routes
-app.register(productRoutes(productService), { prefix: "/api/products" });
+app.route("/api/products", productRoutes(productService));
 
-app.get("/", async () => ({
-  message: "Product Management API",
-  health: "ok",
-}));
+app.get("/", (c) =>
+  c.json({
+    message: "Product Management API",
+    health: "ok",
+  }),
+);
 
-app.get("/health", async () => ({
-  status: "healthy",
-}));
+app.get("/health", (c) =>
+  c.json({
+    status: "healthy",
+  }),
+);
 
-app.listen({ port: 8000, host: "0.0.0.0" }, (err, address) => {
-  if (err) {
-    console.error(err);
-    process.exit(1);
+app.onError((err, c) => {
+  if (err instanceof HTTPException) {
+    return c.json({ detail: err.message }, err.status);
   }
-  console.log(`Server listening at ${address}`);
+  if (err instanceof Error) {
+    return c.json({ detail: err.message }, 400);
+  }
+  return c.json({ detail: "Internal server error" }, 500);
 });
+
+export default {
+  port: 8000,
+  fetch: app.fetch,
+};
