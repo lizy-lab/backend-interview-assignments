@@ -1,4 +1,4 @@
-# Frontend — Product Management UI
+# Frontend - Product Management UI
 
 React + Vite application that connects to the backend API.
 
