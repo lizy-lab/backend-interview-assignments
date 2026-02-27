@@ -14,47 +14,18 @@ cd backend/python
 uv sync
 ```
 
-## Exercise Tasks
+## DDD Layered Structure
 
-### 1. Implement `MemoryProductRepository`
+The codebase follows Clean Architecture with DDD layered structure:
 
-**File:** `src/infrastructure/repository/memory_product_repository.py`
-
-The class extends `ProductRepository` but has no implementation. Implement the `save`, `find_by_id`, and `find_all` methods using an in-memory data structure.
-
-### 2. Implement `update_stock()` method
-
-**File:** `src/domain/model/product.py`
-
-The method currently raises `NotImplementedError`. Implement stock update logic with validation that stock cannot go negative.
-
-### 3. Write tests for `update_stock` validation
-
-**File:** `tests/unit/domain/test_product.py`
-
-Two tests are provided. Write additional tests:
-- Test decreasing stock with a negative quantity
-- Test that reducing stock below zero raises `ValueError`
-
-### 4. Complete the Dockerfile
-
-**File:** `Dockerfile`
-
-Complete the 5 TODOs to containerize the FastAPI application.
-
-**Hints:**
-- The app uses `uv` for dependency management
-- Dependencies are defined in `pyproject.toml` and locked in `uv.lock`
-- The FastAPI app entry point is `src.api.main:app`
-- The server runs on port 8000
-
-**Verification (if Docker is available):**
-
-```bash
-docker build -t product-api .
-docker run -p 8000:8000 product-api
-curl http://localhost:8000/api/products
 ```
+Domain Layer           Pure business logic, no dependencies
+Application Layer      Service orchestration, use cases
+Infrastructure Layer   Technical implementations (repository)
+API Layer              HTTP endpoints, request/response schemas
+```
+
+Your tasks touch the **Domain** and **Infrastructure** layers.
 
 ## Running Tests
 
@@ -68,7 +39,49 @@ uv run pytest
 uv run uvicorn src.api.main:app --reload --port 8000
 ```
 
-Visit `http://localhost:8000/docs` for interactive API documentation.
+## Tasks
+
+### 1. Implement `MemoryProductRepository`
+
+**File:** `src/infrastructure/repository/memory_product_repository.py`
+
+The class extends `ProductRepository` but has no implementation. Implement `save`, `find_by_id`, and `find_all` using an in-memory data structure.
+
+### 2. Implement `update_stock()`
+
+**File:** `src/domain/model/product.py`
+
+The `quantity` parameter is a **delta**: positive adds stock, negative removes stock.
+
+- `update_stock(3)` on a product with stock 10 → stock becomes 13
+- `update_stock(-2)` on a product with stock 10 → stock becomes 8
+
+If the result would be negative, raise a `ValueError`.
+
+### 3. Implement the test stubs
+
+**File:** `tests/unit/domain/test_product.py`
+
+Two tests are marked `TODO`. Implement them.
+
+### 4. Complete the Dockerfile *(optional, time-permitting)*
+
+**File:** `Dockerfile`
+
+Complete the 5 TODOs to containerize the application.
+
+**Hints:**
+- Dependencies: `pyproject.toml` + `uv.lock`
+- Entry point: `src.api.main:app`
+- Port: 8000
+
+**Verification (if Docker is available):**
+
+```bash
+docker build -t product-api .
+docker run -p 8000:8000 product-api
+curl http://localhost:8000/api/products
+```
 
 ## Verification
 

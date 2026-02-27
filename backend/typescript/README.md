@@ -13,46 +13,18 @@ cd backend/typescript
 bun install
 ```
 
-## Exercise Tasks
+## DDD Layered Structure
 
-### 1. Implement `MemoryProductRepository`
+The codebase follows Clean Architecture with DDD layered structure:
 
-**File:** `src/infrastructure/repository/memory-product-repository.ts`
-
-The class extends `ProductRepository` but has no implementation. Implement the `save`, `findById`, and `findAll` methods using an in-memory data structure.
-
-### 2. Implement `updateStock()` method
-
-**File:** `src/domain/model/product.ts`
-
-The method currently throws `Error("Stock update logic not implemented yet.")`. Implement stock update logic with validation that stock cannot go negative.
-
-### 3. Write tests for `updateStock` validation
-
-**File:** `tests/unit/domain/product.test.ts`
-
-Two tests are provided. Write additional tests:
-- Test decreasing stock with a negative quantity
-- Test that reducing stock below zero throws an error
-
-### 4. Complete the Dockerfile
-
-**File:** `Dockerfile`
-
-Complete the 5 TODOs to containerize the Fastify application.
-
-**Hints:**
-- The app uses Bun as the runtime
-- Dependencies are defined in `package.json` and locked in `bun.lock`
-- The app entry point is `src/api/app.ts`
-- The server runs on port 8000
-
-**Verification (if Docker is available):**
-
-```bash
-docker build -t product-api .
-docker run -p 8000:8000 product-api
 ```
+Domain Layer           Pure business logic, no dependencies
+Application Layer      Service orchestration, use cases
+Infrastructure Layer   Technical implementations (repository)
+API Layer              HTTP endpoints, request/response schemas
+```
+
+Your tasks touch the **Domain** and **Infrastructure** layers.
 
 ## Running Tests
 
@@ -64,6 +36,50 @@ bun test
 
 ```bash
 bun run dev
+```
+
+## Tasks
+
+### 1. Implement `MemoryProductRepository`
+
+**File:** `src/infrastructure/repository/memory-product-repository.ts`
+
+The class extends `ProductRepository` but has no implementation. Implement `save`, `findById`, and `findAll` using an in-memory data structure.
+
+### 2. Implement `updateStock()`
+
+**File:** `src/domain/model/product.ts`
+
+The `quantity` parameter is a **delta**: positive adds stock, negative removes stock.
+
+- `updateStock(3)` on a product with stock 10 → stock becomes 13
+- `updateStock(-2)` on a product with stock 10 → stock becomes 8
+
+If the result would be negative, throw an `Error`.
+
+### 3. Implement the test stubs
+
+**File:** `tests/unit/domain/product.test.ts`
+
+Two tests are marked `todo`. Implement them.
+
+### 4. Complete the Dockerfile *(optional, time-permitting)*
+
+**File:** `Dockerfile`
+
+Complete the 5 TODOs to containerize the application.
+
+**Hints:**
+- Dependencies: `package.json` + `bun.lock`
+- Entry point: `src/api/app.ts`
+- Port: 8000
+
+**Verification (if Docker is available):**
+
+```bash
+docker build -t product-api .
+docker run -p 8000:8000 product-api
+curl http://localhost:8000/api/products
 ```
 
 ## Verification
