@@ -14,7 +14,7 @@ cd backend/python
 uv sync
 ```
 
-## DDD Layered Structure
+## Architecture
 
 The codebase follows Clean Architecture with DDD layered structure:
 

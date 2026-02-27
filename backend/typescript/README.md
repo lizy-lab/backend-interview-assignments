@@ -13,7 +13,7 @@ cd backend/typescript
 bun install
 ```
 
-## DDD Layered Structure
+## Architecture
 
 The codebase follows Clean Architecture with DDD layered structure:
 
