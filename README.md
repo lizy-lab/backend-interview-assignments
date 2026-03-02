@@ -17,7 +17,7 @@ A DDD (Domain-Driven Design) live coding exercise. Each part has its own folder 
 |---|---|---|
 | **README** | [`backend/python/`](backend/python/) | [`backend/typescript/`](backend/typescript/) |
 | Runtime | Python 3.13+ / uv | Bun |
-| Framework | FastAPI | Fastify |
+| Framework | FastAPI | Hono |
 | Validation | Pydantic | Zod |
 | Testing | pytest | bun test |
 
