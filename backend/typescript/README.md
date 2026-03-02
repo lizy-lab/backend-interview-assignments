@@ -1,6 +1,6 @@
 # TypeScript Backend
 
-Fastify + Zod backend following DDD architecture, running on Bun.
+Hono + Zod backend following DDD architecture, running on Bun.
 
 ## Prerequisites
 
@@ -39,7 +39,7 @@ Two tests are provided. Write additional tests:
 
 **File:** `Dockerfile`
 
-Complete the 5 TODOs to containerize the Fastify application.
+Complete the 5 TODOs to containerize the Hono application.
 
 **Hints:**
 - The app uses Bun as the runtime
