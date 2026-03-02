@@ -1,6 +1,6 @@
 # TypeScript Backend
 
-Fastify + Zod backend following DDD architecture, running on Bun.
+Hono + Zod backend following DDD architecture, running on Bun.
 
 ## Prerequisites
 

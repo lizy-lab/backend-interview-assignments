@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, test } from "bun:test";
-import { randomUUID } from "crypto";
+import { randomUUID } from "node:crypto";
 import { ProductService } from "../../../src/application/product-service";
 import { Product } from "../../../src/domain/model/product";
 import { MemoryProductRepository } from "../../../src/infrastructure/repository/memory-product-repository";
@@ -39,7 +39,7 @@ describe("ProductService", () => {
 
     // Then
     expect(result).not.toBeNull();
-    expect(result!.id).toBe(product.id);
+    expect(result).toHaveProperty("id", product.id);
   });
 
   test("get nonexistent product", () => {
@@ -80,7 +80,7 @@ describe("ProductService", () => {
 
     // Then
     expect(updated).not.toBeNull();
-    expect(updated!.stock).toBe(initialStock + 3);
+    expect(updated).toHaveProperty("stock", initialStock + 3);
   });
 
   test("update nonexistent product stock", () => {

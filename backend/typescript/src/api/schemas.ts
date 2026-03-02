@@ -1,5 +1,9 @@
 import { z } from "zod";
 
+export const productIdParamSchema = z.object({
+  productId: z.string().uuid("Invalid product ID format"),
+});
+
 export const productCreateSchema = z.object({
   name: z.string().min(1),
   price: z.number().min(0),
