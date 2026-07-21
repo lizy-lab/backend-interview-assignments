@@ -15,5 +15,13 @@ class Product:
         return Product(id=uuid4(), name=name, price=price, stock=stock)
     
     def update_stock(self, quantity: int) -> None:
-        """Update product stock quantity."""
-        raise NotImplementedError("Stock update logic not implemented yet.")
+        """Adjust stock by a delta (positive adds, negative removes).
+
+        Raises ValueError if the result would be negative.
+        """
+        new_stock = self.stock + quantity
+        if new_stock < 0:
+            raise ValueError(
+                f"Insufficient stock: have {self.stock}, cannot apply {quantity}"
+            )
+        self.stock = new_stock

@@ -25,6 +25,13 @@ htmlcov/
 venv/
 .venv/
 
+# SQLite database (created at runtime)
+*.db
+*.db-journal
+
+# Interviewer answer key — never commit (lives in Notion)
+INTERVIEWER.md
+
 # TypeScript / Bun
 node_modules/
 *.tsbuildinfo

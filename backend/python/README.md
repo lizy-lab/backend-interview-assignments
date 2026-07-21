@@ -1,6 +1,6 @@
 # Python Backend
 
-FastAPI + Pydantic backend following DDD architecture.
+FastAPI + Pydantic + SQLAlchemy backend following DDD architecture.
 
 ## Prerequisites
 
@@ -16,16 +16,23 @@ uv sync
 
 ## Architecture
 
-The codebase follows Clean Architecture with DDD layered structure:
+The codebase currently follows a Clean Architecture / DDD layered structure:
 
 ```
-Domain Layer           Pure business logic, no dependencies
+Domain Layer           Pure business logic, no framework/persistence deps
 Application Layer      Service orchestration, use cases
-Infrastructure Layer   Technical implementations (repository)
+Infrastructure Layer   Technical implementations (DB, ORM, repositories)
 API Layer              HTTP endpoints, request/response schemas
 ```
 
-Your tasks touch the **Domain** and **Infrastructure** layers.
+Persistence is a local **SQLite** database (`interview.db`). It is created
+automatically the first time you start the server, and seeded with a sample
+product catalog — there is no migration step to run.
+
+The **Product** feature is already implemented end to end (domain model →
+repository interface → ORM model → SQLAlchemy repository → service → API
+routes + schemas). Treat it as a reference for how the current code is
+organised.
 
 ## Running Tests
 
@@ -39,57 +46,52 @@ uv run pytest
 uv run uvicorn src.api.main:app --reload --port 8000
 ```
 
-## Tasks
+Interactive API docs: http://localhost:8000/docs
 
-### 1. Implement `MemoryProductRepository`
+## Your Task
 
-**File:** `src/infrastructure/repository/memory_product_repository.py`
+You'll be working with an AI coding agent (e.g. Claude Code). Use it however
+you normally would — we're interested in how you **direct and review** the
+agent and in the **design decisions** you make, not in how fast you type.
 
-The class extends `ProductRepository` but has no implementation. Implement `save`, `find_by_id`, and `find_all` using an in-memory data structure.
+One thing we'd love you to do as you go: whenever the agent hands you a chunk
+of code, talk us through what it does in your own words before you accept or
+tweak it. Think of it as reviewing a teammate's PR out loud. It helps us follow
+your thinking, and it's really the heart of what we're looking at here.
 
-### 2. Implement `update_stock()`
+**From here on, it's all on you.** That includes the decisions already baked
+into the starter code — the layering, the domain/ORM split, the data types,
+the error handling, all of it. None of it is off-limits. If you think
+something in the existing code is wrong or over-built, you're free to change
+it. The only conditions: you can **justify** the change, and you still **land
+the work within the time available**. Equally, if you keep something, be ready
+to say why.
 
-**File:** `src/domain/model/product.py`
+We want to add two features to the shop backend: **customers** and **orders**.
 
-The `quantity` parameter is a **delta**: positive adds stock, negative removes stock.
+### Customers
 
-- `update_stock(3)` on a product with stock 10 → stock becomes 13
-- `update_stock(-2)` on a product with stock 10 → stock becomes 8
+We need to keep track of customers. A customer has a name and an email
+address. We should be able to create a customer and look one up.
 
-If the result would be negative, raise a `ValueError`.
+### Orders
 
-### 3. Implement the test stubs
+A customer can place an **order**. An order is for one or more products, and
+for each product the customer says how many they want. Placing an order should
+reduce the stock of the products that were ordered, since those items are now
+spoken for.
 
-**File:** `tests/unit/domain/test_product.py`
+We need to be able to place an order and to look up a previously placed order
+(including what was in it).
 
-Two tests are marked `TODO`. Implement them.
+### What we expect
 
-### 4. Complete the Dockerfile *(optional, time-permitting)*
+- The behaviour should hold up when things go wrong, not just on the happy
+  path. Think about what could go wrong when an order is placed and make sure
+  the system behaves sensibly.
+- Include at least one test that demonstrates what happens when an order
+  **cannot** be fully fulfilled. It should make the guarantee you've chosen
+  obvious to a reviewer.
 
-**File:** `Dockerfile`
-
-Complete the 5 TODOs to containerize the application.
-
-**Hints:**
-- Dependencies: `pyproject.toml` + `uv.lock`
-- Entry point: `src.api.main:app`
-- Port: 8000
-
-**Verification (if Docker is available):**
-
-```bash
-docker build -t product-api .
-docker run -p 8000:8000 product-api
-curl http://localhost:8000/api/products
-```
-
-## Verification
-
-```bash
-curl http://localhost:8000/api/products
-# Should return []
-
-curl -X POST http://localhost:8000/api/products \
-  -H "Content-Type: application/json" \
-  -d '{"name":"Test","price":9.99,"stock":10}'
-```
+Ask questions if anything is unclear — deciding what "sensible" means here is
+part of the exercise.
