@@ -30,7 +30,25 @@ describe("Product", () => {
     expect(product.stock).toBe(initialStock + 3);
   });
 
-  test.todo("update stock decrease");
+  test("update stock decrease", () => {
+    // Given
+    const product = Product.create("Test Product", 10.99, 5);
 
-  test.todo("update stock negative throws error");
+    // When
+    product.updateStock(-2);
+
+    // Then
+    expect(product.stock).toBe(3);
+  });
+
+  test("update stock negative throws error", () => {
+    // Given
+    const product = Product.create("Test Product", 10.99, 5);
+
+    // When / Then
+    expect(() => product.updateStock(-10)).toThrow();
+
+    // And stock is unchanged
+    expect(product.stock).toBe(5);
+  });
 });
