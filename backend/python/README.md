@@ -50,14 +50,16 @@ Interactive API docs: http://localhost:8000/docs
 
 ## Your Task
 
-You'll be working with an AI coding agent (e.g. Claude Code). Use it however
-you normally would — we're interested in how you **direct and review** the
-agent and in the **design decisions** you make, not in how fast you type.
+Work however you normally would. If that includes an AI coding agent (e.g.
+Claude Code), go ahead and use it — it's welcome, not required, and you won't
+be scored on the choice either way. What we're interested in is the **design
+decisions** you make and how you **reason about the code you end up with**,
+not how fast you type.
 
-One thing we'd love you to do as you go: whenever the agent hands you a chunk
-of code, talk us through what it does in your own words before you accept or
-tweak it. Think of it as reviewing a teammate's PR out loud. It helps us follow
-your thinking, and it's really the heart of what we're looking at here.
+One thing we'd love you to do as you go, whichever way the code arrives:
+talk us through what a chunk does in your own words before you settle on it.
+Think of it as reviewing a teammate's PR out loud. It helps us follow your
+thinking, and it's really the heart of what we're looking at here.
 
 **From here on, it's all on you.** That includes the decisions already baked
 into the starter code — the layering, the domain/ORM split, the data types,
@@ -86,6 +88,8 @@ We need to be able to place an order and to look up a previously placed order
 
 ### What we expect
 
+- **The backend is the deliverable.** Customers and orders working end to end —
+  domain model, persistence, service, HTTP endpoints — is the bar.
 - The behaviour should hold up when things go wrong, not just on the happy
   path. Think about what could go wrong when an order is placed and make sure
   the system behaves sensibly.
@@ -95,3 +99,15 @@ We need to be able to place an order and to look up a previously placed order
 
 Ask questions if anything is unclear — deciding what "sensible" means here is
 part of the exercise.
+
+### If you have time left over *(optional)*
+
+There's a small React frontend in [`frontend/`](../../frontend/) — see its
+README for setup. It ships with a ready-made API client
+(`src/services/api.js`) and a working create-product form; the product list is
+still a stub. Putting a thin UI on top of your new work (creating a customer,
+placing an order, looking one up) is a welcome bonus.
+
+Only reach for this once the backend stands on its own, though: a finished
+backend beats a half-finished stack, and we won't hold it against you if there
+was never time.
