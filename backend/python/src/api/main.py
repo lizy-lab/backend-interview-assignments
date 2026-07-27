@@ -3,7 +3,11 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from src.api.routes import router
 from src.application.product_service import ProductService
-from src.infrastructure.repository.memory_product_repository import MemoryProductRepository
+from src.infrastructure.db.database import SessionLocal, create_tables
+from src.infrastructure.db.seed import seed_products
+from src.infrastructure.repository.sqlalchemy_product_repository import (
+    SqlAlchemyProductRepository,
+)
 
 # Create FastAPI app
 app = FastAPI(
@@ -21,8 +25,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Create the SQLite database file + tables and seed sample products on startup.
+create_tables()
+seed_products()
+
 # Initialize repository and service (Dependency Injection)
-repository = MemoryProductRepository()
+repository = SqlAlchemyProductRepository(SessionLocal)
 product_service = ProductService(repository)
 
 # Make service available to routes

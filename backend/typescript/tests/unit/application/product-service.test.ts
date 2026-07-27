@@ -2,14 +2,15 @@ import { beforeEach, describe, expect, test } from "bun:test";
 import { randomUUID } from "node:crypto";
 import { ProductService } from "../../../src/application/product-service";
 import { Product } from "../../../src/domain/model/product";
-import { MemoryProductRepository } from "../../../src/infrastructure/repository/memory-product-repository";
+import type { DrizzleProductRepository } from "../../../src/infrastructure/repository/drizzle-product-repository";
+import { createTestProductRepository } from "../../helpers/in-memory-db";
 
 describe("ProductService", () => {
-  let repository: MemoryProductRepository;
+  let repository: DrizzleProductRepository;
   let service: ProductService;
 
   beforeEach(() => {
-    repository = new MemoryProductRepository();
+    repository = createTestProductRepository();
     service = new ProductService(repository);
   });
 

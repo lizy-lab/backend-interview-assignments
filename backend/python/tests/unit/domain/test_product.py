@@ -33,8 +33,23 @@ def test_update_stock_positive():
 
 
 def test_update_stock_decrease():
-    pytest.fail("TODO: implement this test")
+    # Given
+    product = Product.create(name="Test Product", price=10.99, stock=5)
+
+    # When
+    product.update_stock(-2)
+
+    # Then
+    assert product.stock == 3
 
 
 def test_update_stock_negative_raises_error():
-    pytest.fail("TODO: implement this test")
+    # Given
+    product = Product.create(name="Test Product", price=10.99, stock=5)
+
+    # When / Then
+    with pytest.raises(ValueError):
+        product.update_stock(-10)
+
+    # And stock is unchanged
+    assert product.stock == 5

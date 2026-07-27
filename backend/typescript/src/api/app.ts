@@ -2,7 +2,9 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { HTTPException } from "hono/http-exception";
 import { ProductService } from "../application/product-service";
-import { MemoryProductRepository } from "../infrastructure/repository/memory-product-repository";
+import { createDatabase } from "../infrastructure/db/database";
+import { seedProducts } from "../infrastructure/db/seed";
+import { DrizzleProductRepository } from "../infrastructure/repository/drizzle-product-repository";
 import { productRoutes } from "./routes";
 
 const app = new Hono();
@@ -13,8 +15,12 @@ app.use(
   }),
 );
 
+// Create the SQLite database file + tables and seed sample products on startup.
+const { db } = createDatabase();
+seedProducts(db);
+
 // Dependency injection
-const repository = new MemoryProductRepository();
+const repository = new DrizzleProductRepository(db);
 const productService = new ProductService(repository);
 
 // Routes

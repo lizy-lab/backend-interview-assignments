@@ -25,6 +25,16 @@ htmlcov/
 venv/
 .venv/
 
+# SQLite database (created at runtime)
+*.db
+*.db-journal
+
+# Interviewer answer key — never commit (lives in Notion)
+INTERVIEWER.md
+
+# Claude Code local settings (per-machine, may contain MCP config / secrets)
+.claude/
+
 # TypeScript / Bun
 node_modules/
 *.tsbuildinfo

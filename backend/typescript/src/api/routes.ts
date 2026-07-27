@@ -20,10 +20,12 @@ function toProductResponse(product: Product): ProductResponse {
   };
 }
 
-const validationHook = (
-  result: z.SafeParseReturnType<unknown, unknown>,
-  c: Context,
-) => {
+/** Turns a failed Zod validation into a 400 with the first issue's message. */
+type ValidationResult =
+  | { success: true }
+  | { success: false; error: z.ZodError };
+
+const validationHook = (result: ValidationResult, c: Context) => {
   if (!result.success) {
     return c.json({ detail: result.error.issues[0].message }, 400);
   }

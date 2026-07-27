@@ -12,8 +12,18 @@ export class Product {
     return new Product(randomUUID(), name, price, stock);
   }
 
-  /** Update product stock quantity. */
+  /**
+   * Adjust stock by a delta (positive adds, negative removes).
+   *
+   * Throws if the result would be negative.
+   */
   updateStock(quantity: number): void {
-    throw new Error("Stock update logic not implemented yet.");
+    const newStock = this.stock + quantity;
+    if (newStock < 0) {
+      throw new Error(
+        `Insufficient stock: have ${this.stock}, cannot apply ${quantity}`,
+      );
+    }
+    this.stock = newStock;
   }
 }

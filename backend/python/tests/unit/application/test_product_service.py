@@ -3,12 +3,6 @@ from uuid import UUID, uuid4
 
 from src.application.product_service import ProductService
 from src.domain.model.product import Product
-from src.infrastructure.repository.memory_product_repository import MemoryProductRepository
-
-
-@pytest.fixture
-def product_repository():
-    return MemoryProductRepository()
 
 
 @pytest.fixture
