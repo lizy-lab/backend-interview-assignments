@@ -61,6 +61,22 @@ talk us through what a chunk does in your own words before you settle on it.
 Think of it as reviewing a teammate's PR out loud. It helps us follow your
 thinking, and it's really the heart of what we're looking at here.
 
+### How to spend the time
+
+You have **~40 minutes**, and we will stop you when the time is up — so plan
+for it rather than discovering it. Here's roughly how we'd budget it:
+
+| Share | ≈ Time | What |
+|---|---|---|
+| 10–15% | 4–6 min | **Get oriented.** Skim the code, read the ticket below, ask us whatever you need. With or without an agent — your call. |
+| 30–40% | 12–16 min | **Build it.** Get customers and orders working. |
+| the rest | ~18–22 min | **Verify, wrap up, course-correct.** Exercise the endpoints for real, run the tests, ask questions, change your mind about something if you need to. |
+
+Whatever exists at the deadline is what we look at, so bias towards having
+something working and verified over something half-built. The main thing we'd
+steer you away from is a long silent analysis phase — start building early and
+expect to revise. Questions to us don't count against you; ask them as you go.
+
 **From here on, it's all on you.** That includes the decisions already baked
 into the starter code — the layering, the domain/ORM split, the data types,
 the error handling, all of it. None of it is off-limits. If you think
